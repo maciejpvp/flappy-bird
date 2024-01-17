@@ -3,10 +3,12 @@
 let playerX = 80;
 let playerY = 50;
 let playerFallSpeed = -8;
-const playerWidth = 25;
-const playerHeight = 25;
+const playerWidth = 45;
+const playerHeight = 45;
 let points = 0;
 const flyValue = 5;
+const playerImage = new Image();
+playerImage.src = "assets/player.png";
 
 //player object
 let player = {
@@ -24,8 +26,18 @@ const pipeWidth = 30;
 const pipeHeight = 400; 
 const numberOfPipes = 1000;
 const initialX = 370;
-const verticalGap = 115;
+const verticalGap = 130;
 const horizontalGap = 120;
+let whichImage = 1;
+
+const bottomPipeImage = new Image();
+bottomPipeImage.src = "assets/bottomPipe.png";
+
+const upperPipeImage = new Image();
+upperPipeImage.src = "assets/upperPipe.png";
+
+const backgroundImage = new Image();
+backgroundImage.src = "assets/background.png";
 
 window.onload = () => {
     board = document.getElementById("mycanvas");
@@ -44,16 +56,25 @@ const update = () => {
     requestAnimationFrame(update);
     context.clearRect(0, 0, board.width, board.height);
     context.fillStyle = "rgb(22, 148, 217)";
-    context.fillRect(0, 0, board.width, board.height);
+    context.drawImage(backgroundImage, 0, 0, board.width, board.height);
     
     //new frame
-    context.fillStyle = "white";
     checkFly();
-    context.fillRect(player.x, player.y, player.width, player.height);
+    context.drawImage(playerImage, player.x, player.y, player.width, player.height);
     pipesArray.forEach(pipe => {
         pipe.x -= pipeSpeed;
-        context.fillRect(pipe.x, pipe.y, pipe.width, pipe.height);
+        if (whichImage == 1) {
+            context.drawImage(upperPipeImage, pipe.x, pipe.y, pipe.width, pipe.height);
+            whichImage = 0;
+        }
+        else {
+            context.drawImage(bottomPipeImage, pipe.x, pipe.y, pipe.width, pipe.height);
+            whichImage = 1;
+        }
+        
     });
+    context.fillStyle = "black";
+    context.fillRect(10, 5, 20, 25);
     context.fillStyle = "white";
     context.font = "22px Tsuki Typeface";
     context.fillText(points, 15, 25);
