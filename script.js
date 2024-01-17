@@ -2,10 +2,11 @@
 //player variables
 let playerX = 80;
 let playerY = 50;
-let playerFallSpeed = -5;
+let playerFallSpeed = -8;
 const playerWidth = 25;
 const playerHeight = 25;
 let points = 0;
+const flyValue = 5;
 
 //player object
 let player = {
@@ -15,6 +16,16 @@ let player = {
     height : playerHeight,
     veloY : playerFallSpeed
 }
+
+//pipes config
+const pipeSpeed = 2;
+
+const pipeWidth = 30;
+const pipeHeight = 400; 
+const numberOfPipes = 1000;
+const initialX = 370;
+const verticalGap = 115;
+const horizontalGap = 110;
 
 window.onload = () => {
     board = document.getElementById("mycanvas");
@@ -34,11 +45,7 @@ const update = () => {
     
     //new frame
     context.fillStyle = "white";
-    checkBottomCol();
-    pipeCols();
-    if (player.veloY > -5) {
-        player.veloY -= 1;
-    }
+    checkFly();
     context.fillRect(player.x, player.y, player.width, player.height);
     pipesArray.forEach(pipe => {
         pipe.x -= pipeSpeed;
@@ -47,6 +54,16 @@ const update = () => {
     context.fillStyle = "white";
     context.font = "22px Tsuki Typeface";
     context.fillText(points, 15, 25);
+
+    checkBottomCol();
+    pipeCols();
+}
+
+const checkFly = () => {
+    if (player.veloY <= flyValue && player.veloY != playerFallSpeed) {
+        console.log(player.veloY);
+        player.veloY -= .5;
+    }
 }
 
 const checkBottomCol = () => {
@@ -70,22 +87,25 @@ const pipeCols = () => {
         if (player.x > pipe.x + pipe.width && !pipe.playerPassed) {
             pipe.playerPassed = true;
             points += 0.5;
-            console.log(points);
         }
     });
 };
 
 const keydown = (e) => {
-    if (e.code == "ArrowUp") {
-        player.veloY = 8;
+    if (e.code == "ArrowUp" || e.code == "Space") {
+        player.veloY = flyValue;
     }
 }
+
+// const sleep = (ms) => {
+//     return new Promise(resolve => setTimeout(resolve, ms));
+//   }
 
 const genPipeArray = (numberOfPipes, initialX, pipeWidth, pipeHeight, verticalGap) => {
     const pipesArray = [];
 
     for (let i = 0; i < numberOfPipes; i++) {
-        const pipeX = initialX + i * (pipeWidth + 150);
+        const pipeX = initialX + i * (pipeWidth + horizontalGap);
         const firstPipeY = Math.random() * (0 - (-350)) + (-400);
         const secPipeY = firstPipeY + pipeHeight + verticalGap;
 
@@ -109,13 +129,5 @@ const genPipeArray = (numberOfPipes, initialX, pipeWidth, pipeHeight, verticalGa
 
     return pipesArray;
 }
-
-const pipeSpeed = 1;
-
-const pipeWidth = 25;
-const pipeHeight = 400; 
-const numberOfPipes = 10000;
-const initialX = 350;
-const verticalGap = 130;
 
 const pipesArray = genPipeArray(numberOfPipes, initialX, pipeWidth, pipeHeight, verticalGap);
