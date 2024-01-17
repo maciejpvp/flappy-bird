@@ -22,12 +22,12 @@ let player = {
 //pipes config
 const pipeSpeed = 2;
 
-const pipeWidth = 30;
+const pipeWidth = 40;
 const pipeHeight = 400; 
 const numberOfPipes = 1000;
 const initialX = 370;
-const verticalGap = 130;
-const horizontalGap = 120;
+const verticalGap = 120;
+const horizontalGap = 175;
 let whichImage = 1;
 
 const bottomPipeImage = new Image();

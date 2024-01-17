@@ -1,1 +1,1 @@
-very simple flappy bird game made on canvas
+simple flappy ~~bird~~ pony game
