@@ -25,7 +25,7 @@ const pipeHeight = 400;
 const numberOfPipes = 1000;
 const initialX = 370;
 const verticalGap = 115;
-const horizontalGap = 110;
+const horizontalGap = 120;
 
 window.onload = () => {
     board = document.getElementById("mycanvas");
@@ -34,6 +34,9 @@ window.onload = () => {
     context = board.getContext("2d"); 
     requestAnimationFrame(update);
     addEventListener("keydown", keydown);
+    board.addEventListener('click', () => {
+        player.veloY = flyValue;
+     });
 }
 
 const update = () => {
