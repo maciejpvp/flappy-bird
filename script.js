@@ -5,6 +5,8 @@ let playerY = 50;
 let playerFallSpeed = -8;
 const playerWidth = 45;
 const playerHeight = 45;
+const playerHitboxX = 5;
+const playerHitboxY = 10;
 let points = 0;
 const flyValue = 5;
 const playerImage = new Image();
@@ -20,7 +22,7 @@ let player = {
 }
 
 //pipes config
-const pipeSpeed = 2;
+let pipeSpeed = 2;
 
 const pipeWidth = 40;
 const pipeHeight = 400; 
@@ -46,7 +48,7 @@ window.onload = () => {
     context = board.getContext("2d"); 
     requestAnimationFrame(update);
     addEventListener("keydown", keydown);
-    board.addEventListener('click', () => {
+    window.addEventListener('click', () => {
         player.veloY = flyValue;
      });
 }
@@ -61,6 +63,7 @@ const update = () => {
     //new frame
     checkFly();
     context.drawImage(playerImage, player.x, player.y, player.width, player.height);
+    pipeSpeed += .0002;
     pipesArray.forEach(pipe => {
         pipe.x -= pipeSpeed;
         if (whichImage == 1) {
@@ -78,6 +81,7 @@ const update = () => {
     context.fillStyle = "white";
     context.font = "22px Tsuki Typeface";
     context.fillText(points, 15, 25);
+    context.fillText(pipeSpeed, 15, 45);
 
     checkBottomCol();
     pipeCols();
@@ -85,7 +89,6 @@ const update = () => {
 
 const checkFly = () => {
     if (player.veloY <= flyValue && player.veloY != playerFallSpeed) {
-        console.log(player.veloY);
         player.veloY -= .5;
     }
 }
@@ -101,8 +104,8 @@ const checkBottomCol = () => {
 
 const pipeCols = () => {
     pipesArray.forEach(pipe => {
-        const xCols = player.x < pipe.x + pipe.width && player.x + player.width > pipe.x;
-        const yCols = player.y < pipe.y + pipe.height && player.y + player.height > pipe.y;
+        const xCols = player.x + playerHitboxX < pipe.x + pipe.width && player.x + player.width - playerHitboxX > pipe.x;
+        const yCols = player.y + playerHitboxY < pipe.y + pipe.height && player.y + player.height - playerHitboxY > pipe.y;
 
         if (xCols && yCols) {
             location.reload();
@@ -121,16 +124,17 @@ const keydown = (e) => {
     }
 }
 
-// const sleep = (ms) => {
-//     return new Promise(resolve => setTimeout(resolve, ms));
-//   }
-
+const random = ( lowest, highest) => {
+    const adjustedHigh = (highest - lowest) + 1;       
+    return Math.floor(Math.random()*adjustedHigh) + parseFloat(lowest);
+}
 const genPipeArray = (numberOfPipes, initialX, pipeWidth, pipeHeight, verticalGap) => {
     const pipesArray = [];
 
     for (let i = 0; i < numberOfPipes; i++) {
         const pipeX = initialX + i * (pipeWidth + horizontalGap);
-        const firstPipeY = Math.random() * (0 - (-350)) + (-400);
+        // const firstPipeY = Math.random() * (0 - (-350)) + (-400);
+        const firstPipeY = random(-370, -120);
         const secPipeY = firstPipeY + pipeHeight + verticalGap;
 
         const pipe = {
