@@ -1,3 +1,5 @@
+//gameover screen
+let rendergameover = false;
 
 //player variables
 let playerX = 80;
@@ -30,7 +32,7 @@ const numberOfPipes = 1000;
 const initialX = 370;
 const verticalGap = 120;
 const horizontalGap = 175;
-let whichImage = 1;
+let whichImage = true;
 
 const bottomPipeImage = new Image();
 bottomPipeImage.src = "assets/bottomPipe.png";
@@ -66,13 +68,13 @@ const update = () => {
     pipeSpeed += .0002;
     pipesArray.forEach(pipe => {
         pipe.x -= pipeSpeed;
-        if (whichImage == 1) {
+        if (whichImage) {
             context.drawImage(upperPipeImage, pipe.x, pipe.y, pipe.width, pipe.height);
-            whichImage = 0;
+            whichImage = false;
         }
         else {
             context.drawImage(bottomPipeImage, pipe.x, pipe.y, pipe.width, pipe.height);
-            whichImage = 1;
+            whichImage = true;
         }
         
     });
@@ -82,6 +84,18 @@ const update = () => {
     context.font = "22px Tsuki Typeface";
     context.fillText(points, 15, 25);
     context.fillText(pipeSpeed, 15, 45);
+
+
+    //render gameover screen
+    if (rendergameover) {
+        context.fillStyle = "rgb(17, 17, 17)";
+        const gameoverWidth = 200;
+        const gameoverHeight = 170;
+        const gameoverX = board.width/2 - (gameoverWidth/2);
+        const gameoverY = board.height/2 - (gameoverHeight /2);
+        context.fillRect(gameoverX, gameoverY, gameoverWidth, gameoverHeight);
+    }
+
 
     checkBottomCol();
     pipeCols();
@@ -133,7 +147,6 @@ const genPipeArray = (numberOfPipes, initialX, pipeWidth, pipeHeight, verticalGa
 
     for (let i = 0; i < numberOfPipes; i++) {
         const pipeX = initialX + i * (pipeWidth + horizontalGap);
-        // const firstPipeY = Math.random() * (0 - (-350)) + (-400);
         const firstPipeY = random(-370, -120);
         const secPipeY = firstPipeY + pipeHeight + verticalGap;
 
