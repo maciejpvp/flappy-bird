@@ -1,5 +1,4 @@
-//gameover screen
-let rendergameover = false;
+let rendergameover = true;
 
 //player variables
 let playerX = 80;
@@ -85,8 +84,6 @@ const update = () => {
     context.fillText(points, 15, 25);
     context.fillText(pipeSpeed, 15, 45);
 
-
-    //render gameover screen
     if (rendergameover) {
         context.fillStyle = "rgb(17, 17, 17)";
         const gameoverWidth = 200;
